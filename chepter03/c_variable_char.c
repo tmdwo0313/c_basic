@@ -9,6 +9,9 @@
  * ※ 배열은 선언된 이후에 대입연산자로 값 입력 불가
  *   → strcpy(string copy) 함수 사용하면 가능
  *     strcpy() : 문자열 복사
+ * 
+ * '' : 문장형(char)
+ * "" : 문자열형(string)
 */
 
 int main(void) {
@@ -17,4 +20,7 @@ int main(void) {
     printf("딸기 : %s\n", fruit);
     printf("떨가쨈 : %s %s\n", fruit, "jam");    
     
+    // fruit = "banana"; //사용불가
+    strcpy(fruit, "banana");
+    printf("%s\n", fruit);
 }
