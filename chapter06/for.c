@@ -12,9 +12,10 @@ int main(void){
     // → 반복횟수 count : i
     // i = 0, 1, 2 → 3번반복
     // i = 1, 2, 3, ..., 9  → 9번 반복
-    for (int i=0; i<10; i++) {
+    for (int i=1; i<10; i++) {
         a = a * 2;
         // i = i + 1; X
     }
+    // 최종적으로 i값은 10이 됨
     printf("a : %d\n", a);
 }
