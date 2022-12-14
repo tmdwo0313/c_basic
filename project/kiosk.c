@@ -12,14 +12,16 @@ int side_price[3] = {2000, 1500, 2000};
 int drink_price[3] = {1200, 1000, 1000};
 
 // 고객 주문 기록 저장(전역)
-char *menu_save[3] = {};    // 주문 메뉴
-int price_save[3] = {};     // 주문 가격
+char *menu_save[10] = {};    // 주문 메뉴
+int price_save[10] = {};     // 주문 가격
 
 void print_main_menu(void);
 void print_order(void);
 int choice_burger(void);
 int choice_side(void);
 int choice_drink(void);
+int empty_order_search(void);
+void print_total_order(void);
 
 int main() {
     while(1) {
@@ -42,33 +44,42 @@ int main() {
 
         // 3.세부메뉴 출력 (1~4 in)
         int order_num; // 사용자가 선택한 서브메뉴 번호
+        int empty_idx;
         if(menu_num == 1) {         // 햄버거 세트
+            empty_idx = empty_order_search();
             order_num = choice_burger();
-            menu_save[0] = burger_name[order_num=1];
-            price_save[0] = burger_price[order_num-1];
+            menu_save[empty_idx] = burger_name[order_num=1];
+            price_save[empty_idx] = burger_price[order_num-1];
+
+            empty_idx = empty_order_search();
             order_num = choice_side();
-            menu_save[1] = side_name[order_num=1];
-            price_save[1] = side_price[order_num-1];
+            menu_save[empty_idx] = side_name[order_num=1];
+            price_save[empty_idx] = side_price[order_num-1];
+
+            empty_idx = empty_order_search();
             order_num = choice_drink();
-            menu_save[2] = drink_name[order_num=1];
-            price_save[2] = drink_price[order_num-1];
+            menu_save[empty_idx] = drink_name[order_num=1];
+            price_save[empty_idx] = drink_price[order_num-1];
             print_order();
         } else if(menu_num == 2) {  // 햄버거
+            empty_idx = empty_order_search();
             order_num = choice_burger();
-            menu_save[0] = burger_name[order_num=1];  // 버거 이름
-            price_save[0] = burger_price[order_num-1];  // 버거 가격
+            menu_save[empty_idx] = burger_name[order_num=1];  // 버거 이름
+            price_save[empty_idx] = burger_price[order_num-1];  // 버거 가격
             print_order();
 
         } else if(menu_num == 3) {  // 사이드
+            empty_idx = empty_order_search();
             order_num = choice_side();
-            menu_save[0] = side_name[order_num=1];
-            price_save[0] = side_price[order_num-1];
+            menu_save[empty_idx] = side_name[order_num=1];
+            price_save[empty_idx] = side_price[order_num-1];
             print_order();
 
         } else if(menu_num == 4) {  // 드링크
+            empty_idx = empty_order_search();
             order_num = choice_drink();
-            menu_save[0] = drink_name[order_num=1];
-            price_save[0] = drink_price[order_num-1];
+            menu_save[empty_idx] = drink_name[order_num=1];
+            price_save[empty_idx] = drink_price[order_num-1];
             print_order();
         }
 
@@ -82,6 +93,8 @@ int main() {
         if(order_yn == 1) {
             continue;
         } else {
+            // 고객이 주문한 메뉴정보와 총가격을 출력
+            print_total_order();
             break;
         }
     }
@@ -183,4 +196,43 @@ void print_order(void) {
     for (int i=0; i<price_len; i++) {
         printf("가격[%d]: %d\n", i, price_save[i]);
     }
+}
+
+// 주문기록 빈칸 찾기
+int empty_order_search() {
+    int order_len = sizeof(price_save) / sizeof(price_save[0]);
+    int price, idx;
+    // 배열 크기만큼 반복 → ex)배열크기가 10칸 : 10번 반복
+    for(int i=0; i<order_len; i++) {
+        price = price_save[i];
+        if(price == 0) {
+            idx = i;
+            break;
+        }
+    }
+    return idx;
+}
+
+// 전체 주문정보와 총가격 출력
+void print_total_order(void) {
+    // 총 가격 계산
+    
+    int total_price = 0;
+    int order_len = sizeof(price_save) / sizeof(price_save[0]);
+    for(int i=0; i<order_len; i++) {
+        total_price += price_save[i];
+    }
+    // 출력
+    puts("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+    puts("■ 고객님이 주문하신 메뉴는");
+    for(int i=0; i<order_len; i++) {
+        if(menu_save[i] == NULL) {
+            break;
+        }
+        printf("□□ %d: %s\n", (i+1), menu_save[i]);
+    }
+    printf("■ 으로 총 주문금액은 %d원 입니다.", total_price);
+    puts("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+    puts("이용해주셔서 감사합니다.");
+    puts("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 }
